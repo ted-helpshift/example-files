@@ -1,0 +1,13 @@
+import re
+note = input_data['note']
+
+#remove line breaks
+note = note.replace('\n','')
+
+#remove @JIRA 
+note = note.replace('@JIRA','').replace("@Jira", "").replace("@jira", "")
+
+#extract Note 
+match = re.search('body:(.*)created_at:',note)
+
+return {'note': str(match.group(1))}
