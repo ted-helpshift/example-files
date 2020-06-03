@@ -11,13 +11,14 @@ def lambda_handler(event, context):
     encoded_credentials = b64encode(bytes(f'{HELPSHIFT_API_KEY}:""',
                             encoding='ascii')).decode('ascii')
     
-    Declare Variables from HS Bot
-    #issue_id = event['issue_id']
-    #user_id = event['user_id']
+    # Declare Variables from HS Bot
+    issue_id = event['issue_id']
+    user_id = event['user_id']
     
     http = urllib3.PoolManager()
     
     # PUT API CALL TO YOUR SYSTEM HERE 
+    # I used urllib3 since it has native support in Lambda
     '''request1 = http.request(
         'GET',
         'https://YOUR API',
@@ -28,17 +29,16 @@ def lambda_handler(event, context):
     
     if request1.status != 200:
         raise Exception(
-            print("GET CALL TO YOUR API FAILED: ", request1.data.decode('utf-8'))
+            print("GET Call To Your CRM API Failed: ", request1.data.decode('utf-8'))
             )'''
             
-    # Map Responses from API call to your CRM
+    # Map Responses from API call to your CRM to variables to send to the HS-API 
     #result1 = json.loads(r.data.decode('utf-8'))
     #your_CIF = result1["customer"]["customerData"]
     
-    
     # POST TO HS-API
     request2 = http.request('PUT', 'https://api.helpshift.com/v1/{}/issues/{}'.format(HS_DOMAIN, issue_id),
-                body= 'custom_fields={\"YOUR_CIF\": {\"type\":\"singleline\", \"value\":\"%s\"}}'% (your_CIF),
+                body= 'custom_fields={\"YOUR_CIF_API_NAME\": {\"type\":\"singleline\", \"value\":\"%s\"}}'% (your_CIF),
                 headers={
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'authorization': 'Basic {}'.format(encoded_credentials)
@@ -46,7 +46,7 @@ def lambda_handler(event, context):
 
     if request2.status != 200:
         raise Exception(
-            print("YOUR PUT TO HS-API FAILED: ", request2.data.decode('utf-8'))
+            print("Your PUT to HS-API Failed: ", request2.data.decode('utf-8'))
             )
 
     return {
