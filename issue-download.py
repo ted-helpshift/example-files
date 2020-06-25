@@ -60,4 +60,4 @@ while 1:
             f.write("%s\n"%(item["id"]))
 
     start_ts = str(issues[-1]['created_at'])
-    time.sleep(.75)
+    time.sleep(1.5)
