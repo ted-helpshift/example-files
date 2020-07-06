@@ -1,0 +1,20 @@
+trigger CheckEmailFromHelpshift on Case (after insert) {
+  if (Trigger.isAfter && Trigger.isInsert) {
+    /*for(Case c : trigger.new) {
+      if (c.Origin != null && c.Origin == 'Mobile Chat') {
+        try {       // Call the Flow
+          Map<String, Object> params = new Map<String, Object>();
+          params.put('case_number_from_process', c.CaseNumber);
+          params.put('caseemail', c.SuppliedEmail);
+          params.put('hs_emal', c.SuppliedEmail); 
+          Flow.Interview.HS_Contact_Lookup HSFlow = new Flow.Interview.HS_Contact_Lookup(params);
+          HSFlow.start();
+        }
+        catch(DmlException e) {
+          system.debug('The following exception has occurred: ' + e.getMessage());        
+        }
+     }
+  }*/
+  CaseTriggerHandler.afterInsert(trigger.new);  
+  }
+}
